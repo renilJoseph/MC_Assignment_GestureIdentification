@@ -17,6 +17,8 @@ def hello():
 def test():
     print('yeahhhhh')
     print(request.args)
+    print('data' , request.data)
+    print('json' , request.json)
     # imagefile = request.files['media']
     # bytes = imagefile.read()
     return request.args
@@ -57,4 +59,4 @@ def data_aggregate(df: pd.DataFrame) -> pd.DataFrame:
 
     return agg_data
 
-# app.run()
+# app.run(port=80)
