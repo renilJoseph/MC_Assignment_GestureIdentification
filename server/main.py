@@ -30,6 +30,11 @@ def test():
 
     models = load_models()
 
+    print(aggdf.head())
+
+    aggdf_fs = models['Feture Selection'].transform(aggdf)
+    print('aggdf_fs shape ', aggdf_fs.shape)
+
     labelMapping = {}
     labelMapping[0] = 'buy'
     labelMapping[1] = 'communicate'
@@ -39,16 +44,18 @@ def test():
     labelMapping[5] = 'really'
 
     resultmap = {}
-    i=0
+    i=1
     for modelname, model in models.items():
-        res = model.predict(aggdf)
+        if i == 5:
+            break
+        res = model.predict(aggdf_fs)
         print('result of ',modelname , '::' ,res)
         resultmap[i] = labelMapping[res[0]]
         i=i+1
 
     print(resultmap)
 
-    return resultmap
+    return json.dumps(resultmap)
 
 
 MODEL_FILE_PATH = './'
@@ -56,7 +63,8 @@ MODEL_FILENAMES = {
     'Gaussian Naive Bayes' : 'gnb_clf.joblib',
     'Logistic Regression' : 'lr_clf.joblib',
     'Random Forest' : 'rf_clf.joblib',
-    'Voting Classifier' : 'vot_clf.joblib'
+    'Voting Classifier' : 'vot_clf.joblib',
+    'Feture Selection' : 'feat_selection.joblib'
 }
 
 def load_models():
@@ -70,7 +78,10 @@ def load_models():
 def data_aggregate(df: pd.DataFrame) -> pd.DataFrame:
     # skip_cols = ['Frames#']
     df['vid_id'] = 1
-    agg_data = df.groupby('vid_id').agg([np.mean, np.std])
+
+    # agg_data = df.groupby('vid_id').agg([np.mean, np.std])
+
+    agg_data = df.groupby('vid_id').agg([np.mean, np.std, np.min, np.max, pd.DataFrame.kurt, pd.DataFrame.skew])
     agg_data.columns = ["_".join(x) for x in agg_data.columns.ravel()]
     agg_data = agg_data.reset_index()
     agg_data.drop(['vid_id'], axis = 1, inplace=True)
@@ -112,15 +123,13 @@ def convert_to_csv(data):
             one.append(obj['position']['y'])
             if 'part' in obj:
                 tmpmap[obj['part']] = one
-                ncol.add(obj['part'])
+            else:
+                print('not founf ',one)
         one = []
         one.append(data[i]['score'])
         for key, val in tmpmap.items():
             one.extend(val)
-        # print(one, '\n', len(one), data[i]['part'])
-        # print(len(one))
         csv_data[i] = np.array(one)
-    print(ncol)
     df = pd.DataFrame(csv_data, columns=columns)
     return df
 
