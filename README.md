@@ -8,13 +8,11 @@
  - numpy
  - joblib
  
-----
 
 ## Installation
  * Use requirements.txt present inside src folder for installing the dependencies.
      * pip install -r requirements.txt
      
-----
 
 ## Execution (Local Testing)
  * Run command `Python main.py` from src folder.
@@ -22,7 +20,6 @@
  * Return type will be of form:
      * {"1": "predicted_label", "2": "predicted_label", "3": "predicted_label", "4": "predicted_label"}
 
-----
 
 ## Working:
  * Flask server, runs the passed json data on 4 models:
