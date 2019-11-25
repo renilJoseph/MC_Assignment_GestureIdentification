@@ -1,6 +1,0 @@
-gcloud app deploy
-gcloud app logs tail -s default
-curl -X POST -H "Content-Type: application/json" -d '{"type":"Feature"}' https://mcproject-259407.appspot.com/test
-
-
-curl -X POST -H "Content-Type: application/json" -d '{"type":"Feature"}' http://127.0.0.1:80/test
