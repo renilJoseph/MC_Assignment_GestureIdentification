@@ -12,7 +12,7 @@
     ```
     import scipy.io
     mat = scipy.io.loadmat('EEGDataset1.mat')
-    mat['Raw_Data'][0][0].shape : a nd array of shape (106, 3, 19200)
+    mat['Raw_Data'].shape : a nd array of shape (106, 3, 19200)
     ```
     
      
