@@ -1,0 +1,30 @@
+knn, linea classifiers: logistic regression and naive bayes, non linear svm, cnn,  random forest,
+
+
+/usr/local/Cellar/python/3.7.4_1/Frameworks/Python.framework/Versions/3.7/lib/libpython3.7.dylib
+
+/usr/local/Cellar/python/3.7.4_1/Frameworks/Python.framework/Versions/3.7/include/python3.7m
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
+    -D PYTHON3_LIBRARY=/usr/local/Cellar/python/3.7.4_1/Frameworks/Python.framework/Versions/3.7/lib/libpython3.7.dylib \
+    -D PYTHON3_INCLUDE_DIR=/usr/local/Cellar/python/3.7.4_1/Frameworks/Python.framework/Versions/3.7/include/python3.7m \
+    -D PYTHON3_EXECUTABLE=/Users/renil.joseph/Documents/github/class/mcCode/p3env/bin/python \
+    -D BUILD_opencv_python2=OFF \
+    -D BUILD_opencv_python3=ON \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D INSTALL_C_EXAMPLES=OFF \
+    -D BUILD_EXAMPLES=ON ..
+
+
+from keras.optimizers import SGD
+# define baseline model
+def baseline_model():
+    # create model
+    model = Sequential()
+    model.add(Dense(8, input_dim=53, activation='relu'))
+    model.add(Dense(20, activation='softmax'))
+    model.compile(loss = "categorical_crossentropy", optimizer = SGD(lr=0.01), metrics=['accuracy'])
+    #model.compile(loss='categorical_crossentropy', optimizer='adam',metrics=['accuracy'])
+    return model
