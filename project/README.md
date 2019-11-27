@@ -3,27 +3,21 @@
 ## Pre-Requesites
  - Flask
  - Python3
- - scikit-learn
- - pandas
- - numpy
- - joblib
  
 
-## Installation
- * Use requirements.txt present inside src folder for installing the dependencies.
-     * pip install -r requirements.txt
+## Data
+ * Data set: 106 subjects, 3 trails of 2 min per subject. 
+ * There is the sampling rate variable in data-set which is 160. The raw data variable is a 3D matrix 106*3*19200. On each of the three trail there is 120 sec of signal with 160 Hz frequency which means we will have 19200 values.  
+ * To read data:
+    ```
+    import scipy.io
+    mat = scipy.io.loadmat('EEGDataset1.mat')
+    mat['Raw_Data'].shape : a nd array of shape (106, 3, 19200)
+    ```
+    
      
 
 ## Execution (Local Testing)
- * Run command `Python main.py` from src folder.
- * In postman, Pass URL as `http://127.0.0.1:80/test` and in body, pass the keyPoints in json.
- * Return type will be of form:
-     * {"1": "predicted_label", "2": "predicted_label", "3": "predicted_label", "4": "predicted_label"}
 
 
 ## Working:
- * Flask server, runs the passed json data on 4 models:
-     * XGB
-     * Logistic Regression
-     * Voting Classifier
-     * Random Forest
