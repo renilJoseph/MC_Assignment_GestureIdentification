@@ -7,14 +7,28 @@ from flask import Flask
 from flask import request
 import collections
 from datetime import datetime
+import tensorflow as tf
 
 # from google.appengine.api import app_identity
 app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    print(request.args)
-    return "Hello World!"
+    print('blaaaaaaaaaah')
+    startTime = datetime.now()
+
+    resultmap = {}
+    resultmap['prediction'] = 'Leroy'
+    endtime = datetime.now() - startTime
+    endtime = str(endtime.microseconds)
+    resultmap['exec_time'] = endtime;
+
+    # print(type(endtime))
+
+    # print(resultmap)
+
+    return json.dumps(resultmap)
+    # return "Hello World!"
 
 @app.route('/test', methods=['POST'])
 def test():
@@ -24,38 +38,62 @@ def test():
 
     df = json.loads(request.data)
 
-    print(df)
+    df = pd.DataFrame(df)
+
+    # print(df)
+    # print(df.shape)
+
+    
+    col_drops = [ x for x in df.index if int(x)%2 ==1 ]
+    print(len(col_drops), ' ass')
+    df.drop(col_drops, axis=0, inplace=True)
+
+    df = df.values.T
+    df = np.expand_dims(df, axis=2)
+    print('ss', df.shape)
+
+
     # print('df shape::',df.shape)
 
-    df = centralize(df)
-    aggdf = data_aggregate(df)
-    # print('aggdf shape::',aggdf.shape)
+    # df = centralize(df)
+    # aggdf = data_aggregate(df)
+    # # print('aggdf shape::',aggdf.shape)
 
-    models = load_models()
+    # models = load_models()
 
-    # print(aggdf.head())
+    # # print(aggdf.head())
 
-    aggdf_fs = models['Feture Selection'].transform(aggdf)
+    # aggdf_fs = models['Feture Selection'].transform(aggdf)
     # print('aggdf_fs shape ', aggdf_fs.shape)
 
-    labelMapping = {}
-    labelMapping[0] = 'buy'
-    labelMapping[1] = 'communicate'
-    labelMapping[2] = 'fun'
-    labelMapping[3] = 'hope'
-    labelMapping[4] = 'mother'
-    labelMapping[5] = 'really'
+    # labelMapping = {}
+    # labelMapping[0] = 'buy'
+    # labelMapping[1] = 'communicate'
+    # labelMapping[2] = 'fun'
+    # labelMapping[3] = 'hope'
+    # labelMapping[4] = 'mother'
+    # labelMapping[5] = 'really'
+
+    new_model = tf.keras.models.load_model('lstm_eeg.h5')
+
+    # Check its architecture
+    new_model.summary()
 
     resultmap = {}
 
-    i=1
-    for modelname, model in models.items():
-        res = model.predict(aggdf_fs)
-        # print('result of ',modelname , '::' ,res)
-        resultmap['prediction'] = labelMapping[res[0]]
-        i=i+1
+    # i=1
+    # for modelname, model in models.items():
+    #     res = model.predict(aggdf_fs)
+    #     print('result of ',modelname , '::' ,res)
+    #     resultmap['prediction'] = labelMapping[res[0]]
+    #     i=i+1
 
-    endtime = print(datetime.now() - startTime)
+
+    print(new_model.predict(df))
+
+    resultmap['prediction'] = 'Leroy'
+    endtime = datetime.now() - startTime
+    endtime = str(endtime.microseconds)
     resultmap['exec_time'] = endtime;
 
     print(resultmap)
@@ -109,6 +147,13 @@ def data_aggregate(df: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == '__main__':
+
     app.run(host='127.0.0.1', port=80, debug=True)
+
+# if __name__ == '__main__':
+#     app.run(host='192.168.0.7', port=80, debug=True)
+
+# 127.0.0.1
+    # 192.168.0.7
 
 # app.run(port=80)
