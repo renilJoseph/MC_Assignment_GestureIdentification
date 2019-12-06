@@ -17,7 +17,7 @@ Click==7.0
 constantly==15.1.0
 cryptography==2.8
 daphne==2.4.0
-Django==2.2.6
+Django==2.2.8
 Flask==1.1.1
 gast==0.2.2
 google-auth==1.7.1
