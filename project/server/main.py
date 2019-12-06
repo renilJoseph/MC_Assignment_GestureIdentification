@@ -41,11 +41,11 @@ def test():
 
     # print(df)
 
-    # df = pd.DataFrame(np.fromstring(df[1:-1], dtype=float, sep=','))
+    df = pd.DataFrame(np.fromstring(df['data'][1:-1], dtype=float, sep=','))
 
 
     print('df shape before: ', len(df))
-    df = pd.Series(df, dtype='float16')
+    # df = pd.Series(df, dtype='float16')
 
     # print(df)
     print('df.shape: ',df.shape)
@@ -56,9 +56,9 @@ def test():
     df.drop(col_drops, axis=0, inplace=True)
 
     print('aa', df.shape)
-    df = df.values.T
+    # df = df.values.T
     df = np.expand_dims(df, axis=0)
-    df = np.expand_dims(df, axis=2)
+    # df = np.expand_dims(df, axis=2)
 
     print('ss', df.shape)
     
