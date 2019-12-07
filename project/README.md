@@ -3,6 +3,7 @@
 ## Pre-Requesites
  - Flask
  - Python3
+ - Run command `pip install -r requirements.txt`
  
 
 ## Data
@@ -13,11 +14,17 @@
     import scipy.io
     mat = scipy.io.loadmat('EEGDataset1.mat')
     mat['Raw_Data'].shape : a nd array of shape (106, 3, 19200)
-    ```
+    ```     
     
-     
+## Starting FOG Server.
+ * Copy contents of folder 'project' into any computer which is connected to same network as the mobile.
+ * On the system in which contents are copied, Inside 'server/main.py' file, update 'host' parameter(passed to app.run()) to the ip address of the current system.
+ * Run `python main.py` from inside the folder 'server'. This will start the fog server.
+ * Update the system ip address in the source code of android app.
+ 
+## Running Cloud Server
+ * Server is already running inside GCP App Engine.
+ * Hitting from mobile app will work.
 
-## Execution (Local Testing)
-
-
-## Working:
+## Running Android app:
+ * Build and install App from Android Studio
