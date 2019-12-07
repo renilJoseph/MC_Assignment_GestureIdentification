@@ -83,6 +83,50 @@ def test():
     return json.dumps(resultmap)
 
 
+@app.route('/testlstm', methods=['POST'])
+def testlstm():
+    eeg_model = tf.keras.models.load_model('lstm_eeg.h5')
+    startTime = datetime.now()
+    print('yeahhhhh')
+    # print(type(request.json))
+    #print(request.data)
+
+    df = json.loads(request.data)
+
+    # print(df)
+
+    df = pd.DataFrame(np.fromstring(df['data'][1:-1], dtype=float, sep=','))
+
+
+    col_drops = [ x for x in df.index if int(x)%2 ==1 ]
+    print(len(col_drops), ' ass')
+    df.drop(col_drops, axis=0, inplace=True)
+
+    df = df.values.T
+    df = np.expand_dims(df, axis=2)
+    print('ss', df.shape)
+    
+
+    # Check its architecture
+    #new_model.summary()
+
+    resultmap = {}
+
+
+
+    prediction = np.argmax(eeg_model.predict(df)[0])
+
+
+    resultmap['prediction'] = str(prediction)
+    endtime = datetime.now() - startTime
+    endtime = str(endtime.microseconds/1000)
+    resultmap['exec_time'] = endtime;
+
+    print(resultmap)
+
+    return json.dumps(resultmap)
+
+
 MODEL_FILE_PATH = './'
 MODEL_FILENAMES = {
     # 'Gaussian Naive Bayes' : 'gnb_clf.joblib',
